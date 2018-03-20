@@ -1,45 +1,46 @@
-
+//**Robin Ferber 2018**//
 (function textBubbleTypeOn (thisObj) {
-    function buildUI(thisObj) {
-        var windowTitle = localize("$$$/AE/Script/testBuildBubUI/TextBubbleTypeOn=Text Bubble Type On");
-        var buttonOne = localize("$$$/AE/Script/testBuildBubUI/generateBubble=Build Text Bubble");
-        var wind = (thisObj instanceof Panel)? thisObj : new Window('palette', windowTitle);
-            wind.spacing = 0;
-            wind.margins = 4;
-            var buttonGroup = wind.add ("group");
-                buttonGroup.spacing = 4;
-                buttonGroup.margins = 5;
-                buttonGroup.orientation = "row";
-                wind.button1 = buttonGroup.add ("button", undefined, buttonOne);
-                buttonGroup.alignment = "center";
-                buttonGroup.alignChildren = "center";
+    function buildUI(thisObj) {  // build the UI //
+        var windowTitle = localize("$$$/AE/Script/testBuildBubUI/TextBubbleTypeOn=Text Bubble Type On");  // define window title //
+        var buttonOne = localize("$$$/AE/Script/testBuildBubUI/generateBubble=Build Text Bubble");  // define button one text value //
+        var wind = (thisObj instanceof Panel)? thisObj : new Window('palette', windowTitle);  // create window //
+            wind.spacing = 0;  // set window spacing //
+            wind.margins = 4;  // set wndow margins //
+            var buttonGroup = wind.add ("group"); // add button group //
+                buttonGroup.spacing = 4; // set button spacing //
+                buttonGroup.margins = 5; // set button margins //
+                buttonGroup.orientation = "row"; // set button group orientation //
+                wind.button1 = buttonGroup.add ("button", undefined, buttonOne); // add button one to group //
+                buttonGroup.alignment = "center"; // set button alignment //
+                buttonGroup.alignChildren = "center"; // set button chldren alignment // 
 
-            wind.button1.onClick = function(){
-                createBubble();
+            wind.button1.onClick = function(){ // button 1 onclick function //
+                createBubble(); // calling the function containing the layer building functions //
             }
         
-        wind.layout.layout(true);
+        wind.layout.layout(true); // setting the window layout //
 
-        return wind
+        return wind // returning the window for AE to build //
     }
 
 
-    // Show the Panel
-    var w = buildUI(thisObj);
-    if (w.toString() == "[object Panel]") {
-        w;
-    } else {
-        w.show();
+    
+    var w = buildUI(thisObj);  // var to call to build the UI panel //
+    if (w.toString() == "[object Panel]") { // if the UI is not built, build the the UI //
+        w;  // build the object pannel //
+    } else { // else show the object panel // 
+        w.show(); // show the object panel //
     }
    
-     function createBubble() { 
-        app.beginUndoGroup("Build Bubble");
-         var curComp = app.project.activeItem;
-         var text = prompt ("Sentence to be typed on", "").split(" ");
-         var shapeGroup = null;
-         var textSource = null;
+     function createBubble() {   // build bubble //
          
-         var textCheck = function() {
+        app.beginUndoGroup("Build Bubble");// start undo group //
+         var curComp = app.project.activeItem;  // select current comp //
+         var text = prompt ("Sentence to be typed on", "").split(" "); // Prompt user for copy //
+//~          var shapeGroup = null; // declaring 
+//~          var textSource = null; 
+         
+         var textCheck = function() {  //check if text has been entered into prompt //
 
             if(text == ""){
                 alert("No copy entered.");  
@@ -47,8 +48,8 @@
                 createText();
             }
          }
-
-         var converter = function() {
+         
+         var converter = function() {  // get FPS and set key frame interval //
             var FPS = app.project.activeItem.frameRate;
             
             if (FPS === 24) {
@@ -57,8 +58,8 @@
                 frameInterval = .03*10;
             }
          }
-
-        var addControlNull = function(){
+        
+        var addControlNull = function(){  // create the control null //
             var newControlNull = curComp.layers.addNull();
             var nameNull = newControlNull.name = "Bubble Control Null";
             
@@ -82,8 +83,8 @@
             var AddColorPickerSet = curComp.layer("Bubble Control Null").property("Effects").property("Fill").property("Color").setValue([1, 1, 1]);
             var nameColorPicker = AddColorPicker.name = "Bubble Fill:";
          }
-
-         var createText = function(){
+          
+         var createText = function(){  // create the copy layer //
             createShape();
             
             var textLayer = curComp.layers.addText();
@@ -98,9 +99,11 @@
             
             textSource.setValue(textStyle);
             
-            converter();
-
-            for (i=0; i<text.length; i++) {
+            
+            converter();  // run converter function //
+            
+            
+            for (i=0; i<text.length; i++) {  // set copy key frames //
                 if(i===0) {
                     var wordOne = textSource.setValueAtTime(frameInterval, new TextDocument(text[i])); 
                 }else if (i === 1 && text[i] != undefined) {
@@ -136,8 +139,8 @@
                 }
             }
         }
-
-        var createShape = function(){
+        
+        var createShape = function(){  // make bubble shape and add control expressions //
              addControlNull();
              var shapeLayer = curComp.layers.addShape();
              shapeLayer.name = "Text bubble";
@@ -154,11 +157,12 @@
              var addFillExprs = shapeLayer.property("Contents").property("Group 1").property("Contents").property("Fill 1").property("Color").expression = "thisComp.layer('Bubble Control Null').effect('Bubble Fill:')('Color')";
              var addFillOExprs = shapeLayer.property("Contents").property("Group 1").property("Contents").property("Fill 1").property("Opacity").expression = "thisComp.layer('Bubble Control Null').effect('Bubble Fill:')('Opacity')";
          };
-
-         if(curComp){
-            textCheck();
+        
+         if(curComp){  // check that a comp is selected //
+            textCheck();  // run text check function //
          } 
          
           }
-        app.endUndoGroup(); 
+        
+        app.endUndoGroup();   // end undo group //
 })(this);
