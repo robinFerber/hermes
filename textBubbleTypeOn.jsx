@@ -51,7 +51,7 @@
             var FPS = app.project.activeItem.frameRate;
             var FPSdiv = FPS*0.1;
             frameInterval = FPSdiv/FPSdiv;
-            alert(frameInterval);
+            //alert(frameInterval);
          }
         
         var addControlNull = function(){  // create the control null //
