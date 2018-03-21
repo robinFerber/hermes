@@ -37,8 +37,6 @@
         app.beginUndoGroup("Build Bubble");// start undo group //
          var curComp = app.project.activeItem;  // select current comp //
          var text = prompt ("Sentence to be typed on", "").split(" "); // Prompt user for copy //
-//~          var shapeGroup = null; // declaring 
-//~          var textSource = null; 
          
          var textCheck = function() {  //check if text has been entered into prompt //
 
@@ -51,12 +49,9 @@
          
          var converter = function() {  // get FPS and set key frame interval //
             var FPS = app.project.activeItem.frameRate;
-            
-            if (FPS === 24) {
-                frameInterval = .025*10;
-            } else if (FPS === 30){
-                frameInterval = .03*10;
-            }
+            var FPSdiv = FPS*0.1;
+            frameInterval = FPSdiv/FPSdiv;
+            alert(frameInterval);
          }
         
         var addControlNull = function(){  // create the control null //
@@ -86,6 +81,7 @@
           
          var createText = function(){  // create the copy layer //
             createShape();
+            converter();  // run converter function //
             
             var textLayer = curComp.layers.addText();
             var textSource = textLayer.property("Source Text");
@@ -98,11 +94,7 @@
             textStyle.applyFill = true;
             
             textSource.setValue(textStyle);
-            
-            
-            converter();  // run converter function //
-            
-            
+
             for (i=0; i<text.length; i++) {  // set copy key frames //
                 if(i===0) {
                     var wordOne = textSource.setValueAtTime(frameInterval, new TextDocument(text[i])); 
