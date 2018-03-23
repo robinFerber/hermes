@@ -49,8 +49,8 @@
          
          var converter = function() {  // get FPS and set key frame interval //
 //~             var FPS = app.project.activeItem.frameRate;
-            var compLength = curComp.frameDuration;
-            frameInterval = compLength*4;
+            var frameLength = curComp.frameDuration;
+            frameInterval = frameLength*4;
 //~             alert(frameInterval);
          }
         
