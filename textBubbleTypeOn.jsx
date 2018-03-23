@@ -48,10 +48,10 @@
          }
          
          var converter = function() {  // get FPS and set key frame interval //
-            var FPS = app.project.activeItem.frameRate;
-            var FPSdiv = FPS*0.1;
-            frameInterval = FPSdiv/FPSdiv;
-            //alert(frameInterval);
+//~             var FPS = app.project.activeItem.frameRate;
+            var compLength = curComp.frameDuration;
+            frameInterval = compLength*4;
+//~             alert(frameInterval);
          }
         
         var addControlNull = function(){  // create the control null //
