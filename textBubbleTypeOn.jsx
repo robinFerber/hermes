@@ -1,45 +1,48 @@
 //**Robin Ferber 2018**//
+var numFrames = 0;
 (function textBubbleTypeOn (thisObj) {
     function buildUI(thisObj) {  // build the UI //
         var windowTitle = localize("$$$/AE/Script/testBuildBubUI/TextBubbleTypeOn=Text Bubble Type On");  // define window title //
         var buttonOne = localize("$$$/AE/Script/testBuildBubUI/generateBubble=Build Text Bubble");  // define button one text value //
+        var DDOne = ['1','2','3','4','5','6','7','8','9','10'];  // define button one text value // 
+        
         var wind = (thisObj instanceof Panel)? thisObj : new Window('palette', windowTitle);  // create window //
             wind.spacing = 0;  // set window spacing //
             wind.margins = 4;  // set wndow margins //
             var buttonGroup = wind.add ("group"); // add button group //
                 buttonGroup.spacing = 4; // set button spacing //
-                buttonGroup.margins = 5; // set button margins //
+                buttonGroup.margins = 0; // set button margins //
                 buttonGroup.orientation = "row"; // set button group orientation //
                 wind.button1 = buttonGroup.add ("button", undefined, buttonOne); // add button one to group //
+                wind.DD1 = buttonGroup.add("dropdownlist", undefined, DDOne);
+                wind.DD1.selection = 5;
                 buttonGroup.alignment = "center"; // set button alignment //
                 buttonGroup.alignChildren = "center"; // set button chldren alignment // 
-
+                
             wind.button1.onClick = function(){ // button 1 onclick function //
+                numFrames = wind.DD1.selection.text;
                 createBubble(); // calling the function containing the layer building functions //
             }
-        
         wind.layout.layout(true); // setting the window layout //
-
+        
         return wind // returning the window for AE to build //
     }
-
-
-    
     var w = buildUI(thisObj);  // var to call to build the UI panel //
-    if (w.toString() == "[object Panel]") { // if the UI is not built, build the the UI //
-        w;  // build the object pannel //
-    } else { // else show the object panel // 
-        w.show(); // show the object panel //
+    
+    if (w.toString() == "[object Panel]") { 
+        w; 
+    } else {  
+        w.show(); 
     }
    
      function createBubble() {   // build bubble //
          
         app.beginUndoGroup("Build Bubble");// start undo group //
+         var localNumFrame = this.numFrames;
+//~          alert(this.numFrames);
          var curComp = app.project.activeItem;  // select current comp //
          var text = prompt ("Sentence to be typed on", "").split(" "); // Prompt user for copy //
-         
          var textCheck = function() {  //check if text has been entered into prompt //
-
             if(text == ""){
                 alert("No copy entered.");  
             }else{
@@ -47,11 +50,10 @@
             }
          }
          
-         var converter = function() {  // get FPS and set key frame interval //
-//~             var FPS = app.project.activeItem.frameRate;
+         var converter = function() {  // get frame length and set key frame interval //
+             
             var frameLength = curComp.frameDuration;
-            frameInterval = frameLength*4;
-//~             alert(frameInterval);
+            frameInterval = frameLength*localNumFrame;
          }
         
         var addControlNull = function(){  // create the control null //
@@ -94,7 +96,7 @@
             textStyle.applyFill = true;
             
             textSource.setValue(textStyle);
-
+            var sentence = null;
             for (i=0; i<text.length; i++) {  // set copy key frames //
                 if(i===0) {
                     var wordOne = textSource.setValueAtTime(frameInterval, new TextDocument(text[i])); 
