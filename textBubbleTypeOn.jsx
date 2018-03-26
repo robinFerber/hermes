@@ -4,20 +4,25 @@ var numFrames = 0;
     function buildUI(thisObj) {  // build the UI //
         var windowTitle = localize("$$$/AE/Script/testBuildBubUI/TextBubbleTypeOn=Text Bubble Type On");  // define window title //
         var buttonOne = localize("$$$/AE/Script/testBuildBubUI/generateBubble=Build Text Bubble");  // define button one text value //
-        var DDOne = ['1','2','3','4','5','6','7','8','9','10'];  // define button one text value // 
+        var DDOne = ['1','2','3','4','5','6','7','8','9','10'];  // define DD1 text values // 
         
         var wind = (thisObj instanceof Panel)? thisObj : new Window('palette', windowTitle);  // create window //
-            wind.spacing = 0;  // set window spacing //
-            wind.margins = 4;  // set wndow margins //
+            wind.spacing = 3;  // set window spacing //
+            wind.margins = 3;  // set wndow margins //
+            wind.preferredSize = [0, 0, 150, 150];
             var buttonGroup = wind.add ("group"); // add button group //
-                buttonGroup.spacing = 4; // set button spacing //
-                buttonGroup.margins = 0; // set button margins //
-                buttonGroup.orientation = "row"; // set button group orientation //
-                wind.button1 = buttonGroup.add ("button", undefined, buttonOne); // add button one to group //
+                buttonGroup.spacing = 5; // set button spacing //
+                buttonGroup.margins = 5; // set button margins //
+                buttonGroup.orientation = "column"; // set button group orientation //
+                wind.button1 = buttonGroup.add ("button", [0, 0, 120, 25], buttonOne); // add button one to group //
+                wind.button1.alignment = "center";
                 wind.DD1 = buttonGroup.add("dropdownlist", undefined, DDOne);
+                wind.DD1.margins = 5;
+                wind.DD1.text = "Key Interval: ";
+                wind.DD1.text.alignment = "left";
                 wind.DD1.selection = 5;
-                buttonGroup.alignment = "center"; // set button alignment //
-                buttonGroup.alignChildren = "center"; // set button chldren alignment // 
+                buttonGroup.alignment = "right"; // set button alignment //
+                buttonGroup.alignChildren = "right"; // set button chldren alignment // 
                 
             wind.button1.onClick = function(){ // button 1 onclick function //
                 numFrames = wind.DD1.selection.text;
